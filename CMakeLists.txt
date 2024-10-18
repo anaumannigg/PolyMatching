@@ -39,19 +39,21 @@ add_definitions("-DBOOST_BIND_GLOBAL_PLACEHOLDERS")
 # list source files here
 set(sources
         src/main.cpp
-  src/shapefile_io_operations.cpp
-  src/localization.cpp
-  src/graph_computations.cpp
-  src/solution.cpp
-  src/linear_program.cpp
+        src/shapefile_io_operations.cpp
+        src/localization.cpp
+        src/graph_computations.cpp
+        src/solution.cpp
+        src/linear_program.cpp
         include/cgal_includes.h
-  include/shapefile_io_operations.h
-  include/localization.h
-  include/graph_computations.h
-  include/solution.h
-  include/linear_program.h
+        include/shapefile_io_operations.h
+        include/localization.h
+        include/graph_computations.h
+        include/solution.h
+        include/linear_program.h
         include/command_line_parser.h
         src/command_line_parser.cpp
+        include/binary_io.h 
+        src/binary_io.cpp
 )
 
 add_executable(${CMAKE_PROJECT_NAME} ${sources})

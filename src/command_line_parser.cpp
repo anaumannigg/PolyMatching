@@ -7,7 +7,7 @@ void print_help() {
     std::cout << "Usage: polygonmatching [-d dataset_name] [-l lambda]\n"
               << "Options:\n"
               << "  -d dataset_name      Provide the name of the dataset. There should be two Shapefiles\n"
-              << "                       of SINGLE(!) Polygons WITH NO HOLES (to be added) with appendices _osm and _alkis.\n"
+              << "                       of SINGLE(!) Polygons with appendices _osm and _alkis.\n"
               << "                       The code expects it to be located in 'input/dataset_name'.\n"
               << "  -l lambda            Specify the parameter for lambda.\n"
               << "  -t threads           (optional, default 1) Specify the number of threads that will be used for computations on connected components.\n"

@@ -25,23 +25,24 @@ class Localization {
 	//r tree for fast collection of polygons to check
 	bgi::rtree<Value_rtree, bgi::quadratic<16>> rtree;
 	//polys
-	std::vector<Polygon_2> polys;
+	std::vector<Polygon_wh> polys;
 
 public:
-	Localization(std::vector<Polygon_2> polys);
-	bool get_neighbors(Polygon_2 p, std::vector<Polygon_2>* neighbors) const;
-    bool get_neighbors(Polygon_2 p, std::vector<int>* neighbors) const;
-    bool get_neighbors(Point p, std::vector<int>* neighbors) const;
+	Localization(std::vector<Polygon_wh> polys);
+	bool get_neighbors(Polygon_wh p, std::vector<Polygon_wh>* neighbors) const;
+    bool get_neighbors(Polygon_wh p, std::vector<int>* neighbors) const;
+    bool get_neighbors(Polygon p, std::vector<int>* neighbors) const;
+    bool get_neighbors(Point p, std::vector<int>* neighbors, bool consider_holes=true) const;
     bool get_neighbors(Segment p, std::vector<int>* neighbors) const;
-    bool get_neighbors(Polygon_2 p, std::vector<int>* neighbors, double neighboring_threshold) const;
-    bool get_neighbors(Polygon_2 p, int p_index, bool p_map, std::vector<int>* neighbors, double neighboring_threshold, MapOverlay mo) const;
+    bool get_neighbors(Polygon_wh p, std::vector<int>* neighbors, double neighboring_threshold) const;
+    bool get_neighbors(Polygon_wh p, int p_index, bool p_map, std::vector<int>* neighbors, double neighboring_threshold, MapOverlay mo) const;
 	//writes all neighbors into the neighbors vector, for which the input polygon p lies entirely within them, returns true if neighbors have been found, else false
-    bool get_neighbors_fully_included(Polygon_2 p, std::vector<int>* neighbors) const;
+    bool get_neighbors_fully_included(Polygon_wh p, std::vector<int>* neighbors) const;
 	//returns all neighbors n, where I(p,n) / min(area(p),area(n)) > inclusion_threshold
-    bool get_neighbors_majorly_included(Polygon_2 p, std::vector<int>* neighbors, double inclusion_threshold) const;
+    bool get_neighbors_majorly_included(Polygon_wh p, std::vector<int>* neighbors, double inclusion_threshold) const;
 	//returns all neighbors n, where at least inclusion_threshold [0,1] of the area of n is included in query poly p
-    bool get_neighbors_with_minimum_intersection_proportion(Polygon_2 p, std::vector<int>* neighbors, double inclusion_threshold) const;
-    bool are_adjacent(Polygon_2 polyA, int polyB_index) const;
+    bool get_neighbors_with_minimum_intersection_proportion(Polygon_wh p, std::vector<int>* neighbors, double inclusion_threshold) const;
+    bool are_adjacent(Polygon_wh polyA, int polyB_index) const;
     std::vector<Value_rtree> query(Box_rtree query_box) const;
 
 private:
@@ -57,8 +58,8 @@ class MapOverlay {
 public:
     //computes an arrangement of all edges in both sets of polgons. the area of every face gets computed
     //such that intersection- and union areas can then be computed via simple lookups instead of geometric operations.
-	MapOverlay(std::vector<Polygon_2> osm_polys, std::vector<Polygon_2> atkis_polys);
-	void assignFaces(std::vector<Polygon_2> osm_polys, std::vector<Polygon_2> atkis_polys, Localization osm_rtree, Localization atkis_rtree);
+	MapOverlay(std::vector<Polygon_wh> osm_polys, std::vector<Polygon_wh> atkis_polys);
+	void assignFaces(std::vector<Polygon_wh> osm_polys, std::vector<Polygon_wh> atkis_polys, Localization osm_rtree, Localization atkis_rtree);
 	std::vector<int> getCoveredFaces(bool map, int poly_index) const;
     std::vector<int> getCoveredFaces(bool map, std::vector<int> poly_indices) const;
     double getIoU(std::vector<int> osm_indices, std::vector<int> atkis_indices) const;
@@ -72,6 +73,6 @@ public:
     bool doOverlapviaCoveredFaces(std::vector<int> osm_covered_faces, std::vector<int> atkis_covered_faces, double epsilon) const;
 };
 
-std::vector<Polygon_2> merge(const std::vector<Polygon_2>& polys1, const std::vector<Polygon_2>& polys2);
+std::vector<Polygon_wh> merge(const std::vector<Polygon_wh>& polys1, const std::vector<Polygon_wh>& polys2);
 
 #endif

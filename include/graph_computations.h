@@ -18,7 +18,7 @@ public:
 	//initiates an empty multilayer graph
 	CandidateGraph();
 	//initiates the multilayer graph with a vertex for every input polygon
-	CandidateGraph(std::vector<Polygon_2>* osm_polys, std::vector<Polygon_2>* atkis_polys);
+	CandidateGraph(std::vector<Polygon_wh>* osm_polys, std::vector<Polygon_wh>* atkis_polys);
 	//returns a deepcopy of the entire CandidateGraph
 	CandidateGraph copy();
 	//adds edge to multilayer graph in between the vertices 'source' and 'target' in layer 'layer' (in [0,2]) 
@@ -73,7 +73,7 @@ public:
 };
 
 //given a vector of graphs containing nodes only, computes the weighted edges
-void computeEdges(std::vector<CandidateGraph>& g_vec, Localization osm_rtree, Localization atkis_rtree, const MapOverlay& mo, double lambda, const std::vector<Polygon_2>& osm_polys, const std::vector<Polygon_2>& atkis_polys);
+void computeEdges(std::vector<CandidateGraph>& g_vec, Localization osm_rtree, Localization atkis_rtree, const MapOverlay& mo, double lambda, const std::vector<Polygon_wh>& osm_polys, const std::vector<Polygon_wh>& atkis_polys);
 
 //a simple depth first search on the graph g, initialized on vertex v and excluding all vertices with index >= upper_limit
 void DFS(Graph* g, int v, int upper_limit, std::vector<bool>* visited, std::vector<int>* component);
@@ -88,10 +88,10 @@ void precomputeSimpleMatches(CandidateGraph* cg, const MapOverlay& mo, double la
 // replaces single vertices representing those polygons by cumulative vertices
 // does only need a graph with vertices and correct inclusion lookup (see setInclusionProperties), edges are not considered
 // returns true if the graph was modified, else false (on modification, every edge will be deleted and E has to be recomputed)
-bool pregroupIncludedPolygons(CandidateGraph* cg, const std::vector<Polygon_2>& osm_polys, const std::vector<Polygon_2>& atkis_polys, const Localization& osm_rtree, const Localization& atkis_rtree, const MapOverlay& mo, double lambda);
+bool pregroupIncludedPolygons(CandidateGraph* cg, const std::vector<Polygon_wh>& osm_polys, const std::vector<Polygon_wh>& atkis_polys, const Localization& osm_rtree, const Localization& atkis_rtree, const MapOverlay& mo, double lambda);
 
 //scans a graph for inclusion properties between polygons, as this info is needed for pregrouping
 //adds the inclusion relations to the CandidateGraphs in g_vec
-void setInclusionProperties(std::vector<CandidateGraph> &g_vec, const Localization& osm_rtree, const Localization& atkis_rtree, const MapOverlay& mo, double lambda, const std::vector<Polygon_2>& osm_polys, const std::vector<Polygon_2>& atkis_polys);
+void setInclusionProperties(std::vector<CandidateGraph> &g_vec, const Localization& osm_rtree, const Localization& atkis_rtree, const MapOverlay& mo, double lambda, const std::vector<Polygon_wh>& osm_polys, const std::vector<Polygon_wh>& atkis_polys);
 
 #endif

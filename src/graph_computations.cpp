@@ -11,7 +11,7 @@ CandidateGraph::CandidateGraph() {
 	this->fix_matches = std::vector<int>();
 }
 
-CandidateGraph::CandidateGraph(std::vector<Polygon_2>* osm_polys, std::vector<Polygon_2>* atkis_polys) {
+CandidateGraph::CandidateGraph(std::vector<Polygon_wh>* osm_polys, std::vector<Polygon_wh>* atkis_polys) {
 	//create three empty graphs
 	this->g = Graph();
 	this->left_vs = std::vector<int>();
@@ -234,7 +234,7 @@ void CandidateGraph::printVertexOverview() {
 
 //END MULTILAYER GRAPH CLASS
 
-void computeEdges(std::vector<CandidateGraph>& g_vec, Localization osm_rtree, Localization atkis_rtree, const MapOverlay& mo, double lambda, const std::vector<Polygon_2>& osm_polys, const std::vector<Polygon_2>& atkis_polys) {
+void computeEdges(std::vector<CandidateGraph>& g_vec, Localization osm_rtree, Localization atkis_rtree, const MapOverlay& mo, double lambda, const std::vector<Polygon_wh>& osm_polys, const std::vector<Polygon_wh>& atkis_polys) {
     //for all graphs
     for (auto& cg : g_vec) {
         //add edges to graph
@@ -255,8 +255,8 @@ void computeEdges(std::vector<CandidateGraph>& g_vec, Localization osm_rtree, Lo
                 //vertices are of different maps, make sure vL has map 0 aand vR map 1 to not compute edges twice
                 if ((*g)[*vL].referenced_map != (*g)[*vR].referenced_map) {
                     //pair of vertices where vL and vR are in different parts of the bipartite graph
-                    std::vector<Polygon_2> Lpolys = !(*g)[*vL].referenced_map ? osm_polys : atkis_polys;
-                    std::vector<Polygon_2> Rpolys = !(*g)[*vR].referenced_map ? osm_polys : atkis_polys;
+                    std::vector<Polygon_wh> Lpolys = !(*g)[*vL].referenced_map ? osm_polys : atkis_polys;
+                    std::vector<Polygon_wh> Rpolys = !(*g)[*vR].referenced_map ? osm_polys : atkis_polys;
                     Localization rtree = !(*g)[*vL].referenced_map ? atkis_rtree : osm_rtree;
 
                     int osm_vertex_index = !(*g)[*vL].referenced_map ? *vL : *vR;
@@ -1463,7 +1463,7 @@ void precomputeSimpleMatches(CandidateGraph* cg, const MapOverlay& mo, double la
 	
 }
 
-bool pregroupIncludedPolygons(CandidateGraph* cg, const std::vector<Polygon_2>& osm_polys, const std::vector<Polygon_2>& atkis_polys, const Localization& osm_rtree, const Localization& atkis_rtree, const MapOverlay& mo, double lambda) {
+bool pregroupIncludedPolygons(CandidateGraph* cg, const std::vector<Polygon_wh>& osm_polys, const std::vector<Polygon_wh>& atkis_polys, const Localization& osm_rtree, const Localization& atkis_rtree, const MapOverlay& mo, double lambda) {
 	//indicator to remember if graph was modified
 	bool function_modified_g = false;
 	
@@ -1483,7 +1483,7 @@ bool pregroupIncludedPolygons(CandidateGraph* cg, const std::vector<Polygon_2>& 
 		//pregrouping can only be performed if there are at least two included vertices
 		std::vector<int> group;
 		if (inc.size() > 1) {
-			const std::vector<Polygon_2>& polys = map ? osm_polys : atkis_polys;
+			const std::vector<Polygon_wh>& polys = map ? osm_polys : atkis_polys;
 			const Localization& rtree_opp = !map ? osm_rtree : atkis_rtree;
 			//every vertex has to be checked for it to be inserted in to the new group
 			for (const auto& v_inc : inc) {
@@ -1539,7 +1539,7 @@ bool pregroupIncludedPolygons(CandidateGraph* cg, const std::vector<Polygon_2>& 
 
 }
 
-void setInclusionProperties(std::vector<CandidateGraph> &g_vec, const Localization& osm_rtree, const Localization& atkis_rtree, const MapOverlay& mo, double lambda, const std::vector<Polygon_2>& osm_polys, const std::vector<Polygon_2>& atkis_polys) {
+void setInclusionProperties(std::vector<CandidateGraph> &g_vec, const Localization& osm_rtree, const Localization& atkis_rtree, const MapOverlay& mo, double lambda, const std::vector<Polygon_wh>& osm_polys, const std::vector<Polygon_wh>& atkis_polys) {
     //for all graphs
     for (auto& cg : g_vec) {
         //iterate over all pairs of vertices to check, if inclusion property occurs
@@ -1557,8 +1557,8 @@ void setInclusionProperties(std::vector<CandidateGraph> &g_vec, const Localizati
                 //vertices are of different maps, check for inclusion
                 if ((*g)[*vL].referenced_map != (*g)[*vR].referenced_map) {
                     //pair of vertices where vL and vR are in different parts of the bipartite graph
-                    std::vector<Polygon_2> Lpolys = !(*g)[*vL].referenced_map ? osm_polys : atkis_polys;
-                    std::vector<Polygon_2> Rpolys = !(*g)[*vR].referenced_map ? osm_polys : atkis_polys;
+                    std::vector<Polygon_wh> Lpolys = !(*g)[*vL].referenced_map ? osm_polys : atkis_polys;
+                    std::vector<Polygon_wh> Rpolys = !(*g)[*vR].referenced_map ? osm_polys : atkis_polys;
                     Localization rtree = !(*g)[*vL].referenced_map ? atkis_rtree : osm_rtree;
 
                     int osm_vertex_index = !(*g)[*vL].referenced_map ? *vL : *vR;

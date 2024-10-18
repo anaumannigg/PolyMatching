@@ -10,19 +10,19 @@
 #include <boost/geometry/geometries/point_xy.hpp>
 
 //reads shapefile of single polygons without holes into a vector
-void ReadShapeFile(const std::string& filename, std::vector<Polygon_2>* polys);
+void ReadShapeFile(const std::string& filename, std::vector<Polygon_wh>* polys);
 
 //writes polygons into shapefile
-void writeToShapeFile(std::vector<Polygon_2> polys, std::string path);
+void writeToShapeFile(std::vector<Polygon_wh> polys, std::string path);
 
 //writes polygons into shapefile labeled with their group index
-void writeToShapeFile(std::vector<Polygon_2> polys, std::vector<int> group_index, std::string path);
+void writeToShapeFile(std::vector<Polygon_wh> polys, std::vector<int> group_index, std::string path);
 
 //writes polygons into shapefile labeled with their group index and match weight
-void writeToShapeFile(std::vector<Polygon_2> polys, std::vector<int> group_index, std::vector<double> match_weight, std::string path);
+void writeToShapeFile(std::vector<Polygon_wh> polys, std::vector<int> group_index, std::vector<double> match_weight, std::string path);
 
 //writes polygons into wkt-file (.txt)
-void writeToWKT(std::vector<Polygon_2> polys, std::string path);
+void writeToWKT(std::vector<Polygon_wh> polys, std::string path);
 
 //writes Segmets into wkt-file (.txt)
 void writeToWKT(std::vector<Segment> segments, std::string path);
